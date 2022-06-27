@@ -1,15 +1,24 @@
 import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/users.entities';
+import { uuid } from 'uuidv4';
 
 @Injectable()
 export class UsersService {
-  users: User[] = [];
+  users: User[] = [{
+    name: "Mateus",
+    email: "mateus@hotmail.com",
+    id: uuid()
+  }];
 
   getAll() {
     return this.users;
   }
 
-  create() {
-    return 'criação';
+  create(createUserDto: CreateUserDto): User {
+    const newUser: User = { id: uuid(), ...createUserDto };
+
+    this.users.push(newUser);
+    return newUser;
   }
 }
