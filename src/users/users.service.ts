@@ -5,11 +5,23 @@ import { uuid } from 'uuidv4';
 
 @Injectable()
 export class UsersService {
-  users: User[] = [{
-    name: "Mateus",
-    email: "mateus@hotmail.com",
-    id: uuid()
-  }];
+  users: User[] = [
+    {
+      name: 'Mateus',
+      email: 'mateus@hotmail.com',
+      id: uuid(),
+    },
+    {
+      name: 'Marcos',
+      email: 'marcos@hotmail.com',
+      id: uuid(),
+    },
+    {
+      name: 'Wesley',
+      email: 'Wesley@hotmail.com',
+      id: uuid(),
+    },
+  ];
 
   getAll() {
     return this.users;
