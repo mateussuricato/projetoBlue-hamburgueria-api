@@ -9,21 +9,21 @@ export class ProductsService {
   constructor(private readonly prisma: PrismaService) {}
 
   create(dto: CreateProductDto): Promise<Product> {
-    return this.prisma.product.create({ data: dto});
+    return this.prisma.product.create({ data: dto });
   }
 
   findAll(): Promise<Product[]> {
     return this.prisma.product.findMany();
   }
 
-  findOne(id: string) {
+  findOne(id: string): Promise<Product> {
     return this.prisma.product.findUnique({
       where: { id },
     });
   }
 
-  update(id: string, dto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  update(id: string, dto: UpdateProductDto): Promise<Product> {
+    return this.prisma.product.update({ where: { id }, data: dto });
   }
 
   remove(id: string) {
