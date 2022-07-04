@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { get } from 'http';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -10,44 +18,43 @@ import { UsersService } from './users.service';
 @Controller('/users')
 export class UserController {
   constructor(private readonly usersService: UsersService) {}
+  @Post()
+  @ApiOperation({
+    summary: 'Cria um novo usuário',
+  })
+  create(@Body() dto: CreateUserDto): Promise<User> {
+    return this.usersService.create(dto);
+  }
 
   @Get()
   @ApiOperation({
-    summary: 'Lista todos os usuários'
+    summary: 'Lista todos os usuários',
   })
-  getAll(): Promise<User[]> {
-    return this.usersService.getAll();
+  findAll(): Promise<User[]> {
+    return this.usersService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({
-    summary: 'Lista de usuários por id'
+    summary: 'Lista de usuários por id',
   })
-  getByid(@Param("id") id: string): Promise<User> {
-    return this.usersService.getById(id)
+  findOne(@Param('id') id: string): Promise<User> {
+    return this.usersService.findOne(id);
   }
 
-  @Post()
+  @Patch(':id')
   @ApiOperation({
-    summary: "Cria um novo usuário",
+    summary: 'Atualizar um usuário',
   })
-  create(@Body() dto: CreateUserDto): Promise<User> {
-    return this.usersService.create(dto)
+  update(@Param('id') id: string, @Body() dto: UpdateUserDto): Promise<User> {
+    return this.usersService.update(id, dto);
   }
 
-  @Delete(":id")
+  @Delete(':id')
   @ApiOperation({
-    summary: "Deletar usuário",
+    summary: 'Deletar usuário',
   })
-  delete(@Param("id") id: string): Promise<User> {
-    return this.usersService.delete(id)
-  }
-
-  @Patch(":id")
-  @ApiOperation({
-    summary: "Atualizar um usuário",
-  })
-  update(@Param("id") id: string, @Body() dto: UpdateUserDto): Promise<User> {
-    return this.usersService.update(id, dto)
+  remove(@Param('id') id: string): Promise<User> {
+    return this.usersService.remove(id);
   }
 }
