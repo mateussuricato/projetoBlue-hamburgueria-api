@@ -4,15 +4,12 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 
-
 @Injectable()
 export class ProductsService {
-  constructor(private readonly prisma: PrismaService) {
+  constructor(private readonly prisma: PrismaService) {}
 
-  }
-
-  create(dto: CreateProductDto) {
-    return ;
+  create(dto: CreateProductDto): Promise<Product> {
+    return this.prisma.product.create({ data: dto});
   }
 
   findAll(): Promise<Product[]> {
@@ -20,7 +17,9 @@ export class ProductsService {
   }
 
   findOne(id: string) {
-    return `This action returns a #${id} product`;
+    return this.prisma.product.findUnique({
+      where: { id },
+    });
   }
 
   update(id: string, dto: UpdateProductDto) {
