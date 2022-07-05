@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+import { table } from 'console';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
@@ -16,15 +21,40 @@ export class TablesService {
     return this.prisma.table.findMany();
   }
 
+  async verifyId(id: string): Promise<Table> {
+    const table: Table = await this.prisma.table.findUnique({
+      where: { id },
+    });
+
+    if (!table) {
+      throw new NotFoundException(`Entrada de id ${id} nao encontrada`);
+    }
+
+    return table;
+  }
+
+  handleError(error: Error): never {
+    const errorMessage: string = `Entrada 'table' não está respeitando a constraint UNIQUE`;
+
+    throw new UnprocessableEntityException(errorMessage);
+  }
+
   findOne(id: string): Promise<Table> {
-    return this.prisma.table.findUnique({ where: { id } });
+    return this.verifyId(id);
   }
 
-  update(id: string, dto: UpdateTableDto): Promise<Table> {
-    return this.prisma.table.update({where: {id}, data: dto});
+  async update(id: string, dto: UpdateTableDto): Promise<Table> {
+    await this.verifyId(id);
+
+    return this.prisma.table.update({ where: { id }, data: dto });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} table`;
+  async remove(id: string) {
+    await this.verifyId(id);
+
+    return this.prisma.table.delete({
+      where: { id },
+      select: { number: true },
+    });
   }
 }
