@@ -2,18 +2,19 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TablesService } from './tables.service';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
+import { Table } from './entities/table.entity';
 
 @Controller('tables')
 export class TablesController {
   constructor(private readonly tablesService: TablesService) {}
 
   @Post()
-  create(@Body() dto: CreateTableDto) {
+  create(@Body() dto: CreateTableDto): Promise<Table> {
     return this.tablesService.create(dto);
   }
 
   @Get()
-  findAll() {
+  findAll(): Promise<Table[]> {
     return this.tablesService.findAll();
   }
 
