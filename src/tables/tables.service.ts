@@ -13,8 +13,8 @@ import { Table } from './entities/table.entity';
 export class TablesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(dto: CreateTableDto): Promise<Table> {
-    return this.prisma.table.create({ data: dto });
+  async create(dto: CreateTableDto): Promise<Table> {
+    return this.prisma.table.create({ data: dto }).catch(this.handleError);
   }
 
   findAll(): Promise<Table[]> {
@@ -46,7 +46,9 @@ export class TablesService {
   async update(id: string, dto: UpdateTableDto): Promise<Table> {
     await this.verifyId(id);
 
-    return this.prisma.table.update({ where: { id }, data: dto });
+    return this.prisma.table
+      .update({ where: { id }, data: dto })
+      .catch(this.handleError);
   }
 
   async remove(id: string) {
