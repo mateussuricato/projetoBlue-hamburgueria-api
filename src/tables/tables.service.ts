@@ -8,11 +8,11 @@ import { Table } from './entities/table.entity';
 export class TablesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(dto: CreateTableDto) {
-    return 'This action adds a new table';
+  create(dto: CreateTableDto): Promise<Table> {
+    return this.prisma.table.create({ data: dto});
   }
 
-  findAll() {
+  findAll(): Promise<Table[]> {
     return this.prisma.table.findMany();
   }
 
