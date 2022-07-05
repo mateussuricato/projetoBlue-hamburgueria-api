@@ -9,15 +9,15 @@ export class TablesService {
   constructor(private readonly prisma: PrismaService) {}
 
   create(dto: CreateTableDto): Promise<Table> {
-    return this.prisma.table.create({ data: dto});
+    return this.prisma.table.create({ data: dto });
   }
 
   findAll(): Promise<Table[]> {
     return this.prisma.table.findMany();
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} table`;
+  findOne(id: string): Promise<Table> {
+    return this.prisma.table.findUnique({ where: { id } });
   }
 
   update(id: string, dto: UpdateTableDto) {
