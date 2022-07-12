@@ -37,13 +37,14 @@ export class ProductsService {
   }
 
   async findUsersLiked(id: string) {
-    const product: Product = await this.prisma.product.findUnique({
-      where: { id },
-    });
+    const product: Product = await this.verifyId(id);
 
     return this.prisma.favorite.findMany({
       where: { productName: product.name },
-      select: {productName: true, user: {select: {name: true, email: true}}}
+      select: {
+        productName: true,
+        user: { select: { name: true, email: true } },
+      },
     });
   }
 
@@ -76,16 +77,16 @@ export class ProductsService {
 
     if (!product) {
       throw new NotFoundException(
-        `Produto de nome ${dto.productName} nao encontrado`,
+        `Produto de nome ${dto.productName} não encontrado`,
       );
     }
 
     return this.prisma.favorite.create({ data: dto });
   }
 
-  disfavor(id: string) {
+  async disfavor(id: string) {
+    await this.verifyId(id);
+
     return this.prisma.favorite.delete({ where: { id } });
   }
-
-
 }
