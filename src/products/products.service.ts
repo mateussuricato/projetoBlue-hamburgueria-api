@@ -5,6 +5,7 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { handleError } from 'src/utils/handle-error-unique.util';
 import { CreateProductDto } from './dto/create-product.dto';
+import { FavoriteProductDto } from './dto/favorite-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 
@@ -40,13 +41,17 @@ export class ProductsService {
     await this.verifyId(id);
 
     return this.prisma.product
-      .update({ where: { id }, data: dto })
-      .catch(handleError);
+    .update({ where: { id }, data: dto })
+    .catch(handleError);
   }
 
   async remove(id: string) {
     await this.verifyId(id);
 
     return this.prisma.product.delete({ where: { id } });
+  }
+
+  favorite(dto: FavoriteProductDto) {
+    return this.prisma.favorite.create({data: dto})
   }
 }
