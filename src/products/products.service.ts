@@ -36,6 +36,17 @@ export class ProductsService {
     return this.verifyId(id);
   }
 
+  async findUsersLiked(id: string) {
+    const product: Product = await this.prisma.product.findUnique({
+      where: { id },
+    });
+
+    return this.prisma.favorite.findMany({
+      where: { productName: product.name },
+      select: {productName: true, user: {select: {name: true, email: true}}}
+    });
+  }
+
   async update(id: string, dto: UpdateProductDto): Promise<Product | void> {
     await this.verifyId(id);
 
@@ -76,14 +87,5 @@ export class ProductsService {
     return this.prisma.favorite.delete({ where: { id } });
   }
 
-  async findUsersLiked(id: string) {
-    const product: Product = await this.prisma.product.findUnique({
-      where: { id },
-    });
 
-    return this.prisma.favorite.findMany({
-      where: { productName: product.name },
-      select: {productName: true, user: {select: {name: true, email: true}}}
-    });
-  }
 }
