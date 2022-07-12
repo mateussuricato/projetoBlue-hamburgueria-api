@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-
+import { handleError } from 'src/utils/handle-error-unique.util';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -8,8 +8,8 @@ import { Category } from './entities/category.entity';
 @Injectable()
 export class CategoriesService {
   constructor(private readonly prisma: PrismaService) {}
-  create(dto: CreateCategoryDto): Promise<Category> {
-    return this.prisma.category.create({ data: dto });
+ async create(dto: CreateCategoryDto): Promise<Category> {
+    return this.prisma.category.create({ data: dto }).catch(handleError);
   }
 
   findAll(): Promise<Category[]> {
@@ -20,8 +20,8 @@ export class CategoriesService {
     return this.prisma.category.findUnique({ where: { id } });
   }
 
-  update(id: string, dto: UpdateCategoryDto): Promise<Category> {
-    return this.prisma.category.update({ where: { id }, data: dto });
+ async update(id: string, dto: UpdateCategoryDto): Promise<Category> {
+    return this.prisma.category.update({ where: { id }, data: dto }).catch(handleError);
   }
 
   remove(id: string) {
