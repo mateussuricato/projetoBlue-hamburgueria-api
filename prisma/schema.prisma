@@ -20,6 +20,7 @@ model User {
 
   favorites Favorite[]
 
+  orders Order[]
   @@map("user")
 }
 
@@ -37,6 +38,8 @@ model Product {
 
   favorites Favorite[]
 
+  orders Order[]
+
   @@map("products")
 }
 
@@ -45,6 +48,8 @@ model Table {
   number    Int      @unique
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+
+  orders Order[]
 
   @@map("table")
 }
@@ -71,4 +76,18 @@ model Favorite {
 
   @@unique([userId, productName])
   @@map("favorite")
+}
+
+model Order {
+  id          String   @id @default(uuid())
+  table       Table?   @relation(fields: [tableNumber], references: [number], onDelete: SetNull)
+  tableNumber Int?     @map("table_number")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId String? @map("user_id")
+
+  products Product[]
+
+  @@map("order")
 }
