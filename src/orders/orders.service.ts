@@ -25,21 +25,36 @@ export class OrdersService {
       },
     };
 
-    return this.prisma.order.create({ data, select: {
-      id: true,
-      tableNumber: true,
-      createdAt: true,
-      userId: true,
-      products: {
-        select: {
-          name: true
-        }
-      }
-    } });
+    return this.prisma.order.create({
+      data,
+      select: {
+        id: true,
+        tableNumber: true,
+        createdAt: true,
+        userId: true,
+        products: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
   }
 
   findAll() {
-    return `This action returns all orders`;
+    return this.prisma.order.findMany({
+      select: {
+        id: true,
+        tableNumber: true,
+        createdAt: true,
+        userId: true,
+        products: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
   }
 
   findOne(id: string) {
