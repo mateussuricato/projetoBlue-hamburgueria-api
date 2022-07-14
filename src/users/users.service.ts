@@ -1,18 +1,23 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './entities/users.entities';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { handleError } from 'src/utils/handle-error-unique.util';
+import { Favorite } from 'src/favorites/entities/favorite.entity';
 
 @Injectable()
 export class UsersService {
+  private userSelect = {
+    id: true,
+    name: true,
+    email: true,
+    updatedAt: true,
+    createdAt: true,
+  };
   constructor(private readonly prisma: PrismaService) {}
- async create(dto: CreateUserDto): Promise<User | void>  {
+  async create(dto: CreateUserDto): Promise<User | void> {
     const hashedPassword = await bcrypt.hash(dto.password, 8);
 
     const data: CreateUserDto = {
@@ -21,16 +26,27 @@ export class UsersService {
       password: hashedPassword,
     };
 
-    return this.prisma.user.create({ data }).catch(this.handleError)
+    return this.prisma.user
+      .create({ data, select: this.userSelect })
+      .catch(handleError);
   }
 
   findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      select: {
+        ...this.userSelect,
+        favorites: true
+      }
+    });
   }
 
   async verifyId(id: string): Promise<User> {
     const user: User = await this.prisma.user.findUnique({
       where: { id },
+      select: {
+        ...this.userSelect,
+        favorites: true
+      }
     });
 
     if (!user) {
@@ -40,11 +56,13 @@ export class UsersService {
     return user;
   }
 
-  handleError(error: Error): never {
+  async findFavoriteProducts(id: string): Promise<Favorite[]> {
+    await this.verifyId(id);
 
-    const errorMessage: string = `Entrada 'email' não está respeitando a constraint UNIQUE`;
-
-    throw new UnprocessableEntityException(errorMessage);
+    return this.prisma.favorite.findMany({
+      where: { userId: id },
+      select: { productName: true },
+    });
   }
 
   findOne(id: string): Promise<User> {
@@ -54,7 +72,9 @@ export class UsersService {
   async update(id: string, dto: UpdateUserDto): Promise<User | void> {
     await this.verifyId(id);
 
-    return this.prisma.user.update({ where: { id }, data: dto }).catch(this.handleError);;
+    return this.prisma.user
+      .update({ where: { id }, data: dto, select: this.userSelect })
+      .catch(handleError);
   }
 
   async remove(id: string): Promise<User> {
@@ -62,6 +82,7 @@ export class UsersService {
 
     return this.prisma.user.delete({
       where: { id },
+      select: this.userSelect,
     });
   }
 }
