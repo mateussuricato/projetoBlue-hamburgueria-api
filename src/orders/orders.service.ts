@@ -7,6 +7,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 export class OrdersService {
   constructor(private readonly prisma: PrismaService) {}
   create(dto: CreateOrderDto) {
+
     const data: Prisma.OrderCreateInput = {
       table: {
         connect: {
@@ -19,9 +20,9 @@ export class OrdersService {
         },
       },
       products: {
-        connect: dto.products.map((element) => {
-          return { id: element };
-        }),
+        createMany: {
+          data: dto.products.map((element) => ({ productId: element.productId, quantity: element.quantity})),
+        }
       },
     };
 
@@ -29,14 +30,26 @@ export class OrdersService {
       data,
       select: {
         id: true,
-        tableNumber: true,
-        createdAt: true,
-        userId: true,
+        table: {
+          select: {
+            number: true
+          }
+        },
+        user: {
+          select: {
+            name: true
+          }
+        },
         products: {
           select: {
-            name: true,
-          },
-        },
+            quantity: true,
+            product: {
+              select: {
+                name: true
+              }
+            }
+          }
+        }
       },
     });
   }
@@ -45,14 +58,26 @@ export class OrdersService {
     return this.prisma.order.findMany({
       select: {
         id: true,
-        tableNumber: true,
-        createdAt: true,
-        userId: true,
+        table: {
+          select: {
+            number: true
+          }
+        },
+        user: {
+          select: {
+            name: true
+          }
+        },
         products: {
           select: {
-            name: true,
-          },
-        },
+            quantity: true,
+            product: {
+              select: {
+                name: true
+              }
+            }
+          }
+        }
       },
     });
   }
@@ -62,9 +87,11 @@ export class OrdersService {
       where: { id },
       select: {
         id: true,
-        tableNumber: true,
-        createdAt: true,
-        userId: true,
+        table: {
+          select: {
+            number: true
+          }
+        },
         user: {
           select: {
             name: true
@@ -72,9 +99,14 @@ export class OrdersService {
         },
         products: {
           select: {
-            name: true,
-          },
-        },
+            quantity: true,
+            product: {
+              select: {
+                name: true
+              }
+            }
+          }
+        }
       },
     });
   }
