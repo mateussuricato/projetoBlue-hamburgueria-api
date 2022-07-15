@@ -5,7 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { handleError } from 'src/utils/handle-error-unique.util';
-import { Favorite } from 'src/favorites/entities/favorite.entity';
+
 
 @Injectable()
 export class UsersService {
@@ -54,15 +54,6 @@ export class UsersService {
     }
 
     return user;
-  }
-
-  async findFavoriteProducts(id: string): Promise<Favorite[]> {
-    await this.verifyId(id);
-
-    return this.prisma.favorite.findMany({
-      where: { userId: id },
-      select: { productName: true },
-    });
   }
 
   findOne(id: string): Promise<User> {

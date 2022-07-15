@@ -65,8 +65,8 @@ model Category {
 }
 
 model Favorite {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("created_at")
+  id          String   @id @default(uuid())
+  favoritedAt DateTime @default(now()) @map("favirited_at")
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id")
@@ -96,10 +96,10 @@ model OrderToProduct {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
 
-  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
-  productId String? @map("product_id")
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId String?  @map("product_id")
 
-  order Order? @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  order   Order?  @relation(fields: [orderId], references: [id], onDelete: SetNull)
   orderId String? @map("order_id")
 
   quantity Int
