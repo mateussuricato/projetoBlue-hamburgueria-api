@@ -20,8 +20,13 @@ export class FavoritesController {
     return this.favoritesService.unfavoriteProduct(id)
   }
 
-  @Get('/user/:id')
+  @Get('user/:id')
   getUserFavorites(@Param('id') id: string): Promise<Favorite[]> {
     return this.favoritesService.getUserFavorites(id)
+  }
+
+  @Get('product/:id')
+  getUsersWhoFavoritedProduct(@Param('id') id: string) {
+    return this.favoritesService.getUsersWhoFavoritedProduct(id)
   }
 }
