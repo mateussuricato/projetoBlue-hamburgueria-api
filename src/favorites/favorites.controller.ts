@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { FavoriteProductDto } from './dto/favorite-product.dto';
 import { Favorite } from './entities/favorite.entity';
@@ -18,5 +18,10 @@ export class FavoritesController {
   @HttpCode(HttpStatus.NO_CONTENT)
   unfavoriteProduct(@Param('id') id: string) {
     return this.favoritesService.unfavoriteProduct(id)
+  }
+
+  @Get('/user/:id')
+  getUserFavorites(@Param('id') id: string): Promise<Favorite[]> {
+    return this.favoritesService.getUserFavorites(id)
   }
 }
