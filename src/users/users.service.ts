@@ -9,6 +9,7 @@ import { handleError } from 'src/utils/handle-error-unique.util';
 
 @Injectable()
 export class UsersService {
+  constructor(private readonly prisma: PrismaService) {}
   private userSelect = {
     id: true,
     name: true,
@@ -16,7 +17,6 @@ export class UsersService {
     updatedAt: true,
     createdAt: true,
   };
-  constructor(private readonly prisma: PrismaService) {}
   async create(dto: CreateUserDto): Promise<User | void> {
     const hashedPassword = await bcrypt.hash(dto.password, 8);
 

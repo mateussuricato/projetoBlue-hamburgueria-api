@@ -17,6 +17,8 @@ async function bootstrap() {
     .addTag('categories')
     .addTag('orders')
     .addTag('favorites')
+    .addTag('auth')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
