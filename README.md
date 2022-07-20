@@ -16,6 +16,7 @@ Ferramentas usadas:
 <div>
 <img width="5%"  src="https://docs.nestjs.com/assets/logo-small.svg"/>
 <img width="5%"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/768px-Typescript_logo_2020.svg.png"/>
+<img src="https://uploaddeimagens.com.br/images/003/861/119/full/2.png?1652137626"/>
 </div>
 
 ## Como fazer o clone
