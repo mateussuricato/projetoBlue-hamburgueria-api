@@ -8,7 +8,7 @@ Essa API esta toda documentada com swagger, esse projeto faz uso do banco de dad
 
 Clique na imagem abaixo para acessar a documentação do projeto:
 
-<a href="https://projetoblue-modulo4-production.up.railway.app/api/" target="_blank"><img style="width:10%" src="https://www.4x-treme.com/wp-content/uploads/2022/01/7658037-removebg-preview.png" alt="ícone pokedex"></a>
+<a href="https://projetoblue-hamburgueria-api-production.up.railway.app/api/" target="_blank"><img style="width:10%" src="https://www.4x-treme.com/wp-content/uploads/2022/01/7658037-removebg-preview.png" alt="ícone pokedex"></a>
 
 ## Stacks
 Ferramentas usadas:
